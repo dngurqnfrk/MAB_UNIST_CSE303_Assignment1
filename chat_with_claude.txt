@@ -1,0 +1,62 @@
+
+알고리즘의 두 가지 탐색 메커니즘
+메커니즘역할감소 속도Gaussian noise ϵi\epsilon_i
+ϵi​적게 뽑힌 arm의 불확실성 반영1/Ni1/N_i
+1/Ni​Temperature τ(t)\tau(t)
+τ(t)전체적인 탐색-착취 균형1/t1/t
+1/t
+두 메커니즘이 모두 시간에 따라 감소하므로 후반부에는 greedy에 근접합니다. 이것이 다른 알고리즘 대비 낮은 cumulative regret의 주요 원인입니다.
+
+직관 (보고서 introduction용)
+
+초반에는 모든 arm의 추정이 불확실하므로 넓게 탐색하고, 라운드가 진행될수록 추정이 정확해지면서 자연스럽게 좋은 arm에 집중한다. 탐색의 양은 관측 횟수와 전체 라운드 수에 의해 자동으로 조절되므로 별도의 하이퍼파라미터 튜닝 없이도 다양한 환경에 robust하다.
+
+
+보고서에서 "왜 이 알고리즘이 작동하는가" 를 설명할 때 이 두 감소 메커니즘이 핵심 근거가 됩니다. 실험 결과 섹션에는 위의 환경별 분석 (분산 높은 arm에서 강한 이유 등)을 그대로 쓰면 됩니다.입력 내용: 그러면 이 두 아이디어가 이미 나와있는 논문을 찾아줄래?그러면 이 두 아이디어가 이미 나와있는 논문을 찾아줄래?오후 8:46Claude 응답: 두 아이디어에 대한 논문을 정리해드릴게요.웹 검색됨웹 검색됨두 아이디어에 대한 논문을 정리해드릴게요.
+
+아이디어 1: Gaussian Thompson Sampling (empirical variance 활용)
+원조 논문
+Thompson (1933)
+"On the Likelihood That One Unknown Probability Exceeds Another in View of the Evidence of Two Samples"
+Biometrika, 25(3-4), pp. 285–294
+Thompson Sampling은 bandit 문제의 최초 알고리즘이자 최초의 문제 정식화로 여겨지며, 1933년으로 거슬러 올라갑니다. University of Bristol
+Thompson, W. R. (1933). On the likelihood that one unknown probability 
+exceeds another in view of the evidence of two samples. 
+Biometrika, 25(3-4), 285–294.
+Gaussian bandit에서의 이론적 분석
+Honda & Takemura (2014)
+"Optimality of Thompson Sampling for Gaussian Bandits Depends on Priors"
+AISTATS 2014 — https://arxiv.org/pdf/1311.1894
+평균과 분산이 모두 미지인 정규분포 모델에서 uniform prior를 사용한 Thompson Sampling이 이론적 하한에 도달하는 최초의 결과를 증명합니다. Proceedings of Machine Learning Research
+Honda, J., & Takemura, A. (2014). Optimality of Thompson Sampling for 
+Gaussian Bandits Depends on Priors. AISTATS 2014.
+Thompson Sampling의 logarithmic regret 최초 증명
+Agrawal & Goyal (2012)
+"Analysis of Thompson Sampling for the Multi-Armed Bandit Problem"
+COLT 2012 — https://arxiv.org/pdf/1111.1797
+Thompson Sampling이 stochastic multi-armed bandit에서 logarithmic expected regret을 달성함을 최초로 이론적으로 증명한 논문입니다. arxiv
+Agrawal, S., & Goyal, N. (2012). Analysis of Thompson Sampling for the 
+Multi-Armed Bandit Problem. COLT 2012.
+
+아이디어 2: Annealed Softmax (Boltzmann Exploration with Temperature Cooling)
+교과서 레퍼런스 (가장 citation하기 쉬움)
+Sutton & Barto (2018)
+Reinforcement Learning: An Introduction, 2nd ed., MIT Press
+http://incompleteideas.net/book/the-book-2nd.html
+Softmax 알고리즘의 temperature 파라미터는 물리학의 Boltzmann distribution과의 유추로, 높은 온도에서는 무작위에 가깝게 행동하고 낮은 온도에서는 구조적으로 행동합니다. Annealing은 시간에 따라 temperature를 감소시키는 과정입니다. Blogger
+Sutton, R. S., & Barto, A. G. (2018). Reinforcement Learning: An Introduction 
+(2nd ed.). MIT Press. (Chapter 2)
+Boltzmann Exploration의 이론적 한계와 개선
+Cesa-Bianchi et al. (2017)
+"Boltzmann Exploration Done Right"
+NeurIPS 2017 — http://papers.neurips.cc/paper/7208-boltzmann-exploration-done-right.pdf
+Boltzmann/Softmax exploration은 널리 사용되지만 이론적 성능이 거의 분석되지 않았으며, 학습률 파라미터 ηt\eta_t
+ηt​의 설계가 핵심임을 보입니다. NeurIPS
+Cesa-Bianchi, N., et al. (2017). Boltzmann Exploration Done Right. 
+NeurIPS 2017.
+
+보고서에서 인용 전략
+아이디어인용할 논문용도Gaussian noise로 탐색Thompson (1933)아이디어의 기원empirical variance 활용Honda & Takemura (2014)수식 근거Softmax로 arm 선택Sutton & Barto (2018)교과서적 근거temperature 감소Sutton & Barto (2018)annealing 정당화
+"본 알고리즘은 Thompson (1933)의 posterior sampling 아이디어와 Sutton & Barto (2018)의 Annealed Boltzmann Exploration을 결합한 방식입니다" 라고 쓰면 됩니다.
+
+student_algorithm1에 대해 조사해온거야 체크해줘
